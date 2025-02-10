@@ -15,7 +15,7 @@ public class PlayersController {
     @Autowired
     private PlayerService playerService;
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public ResponseEntity<String> savePlayer(@RequestBody Players players){
         playerService.savePlayer(players);
         return ResponseEntity.ok("Saved Player Successfully for the Auction");
