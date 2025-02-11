@@ -34,4 +34,12 @@ public class Players {
     private Team team;
 
     private boolean isSold;
+
+    public boolean getIsSold(){
+        return isSold;
+    }
+
+    public boolean getAvailableToAuction(){
+        return availableToAuction;
+    }
 }

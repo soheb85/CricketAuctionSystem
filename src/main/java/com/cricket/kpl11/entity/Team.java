@@ -22,10 +22,14 @@ public class Team {
 
     private int totalPoint = 10000;
 
-    private int remainingPoint;
+    private int remainingPoint = 10000;
 
-    private int maxSpendOnPlayer;
+    private int maxSpendOnPlayer = 6400;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Players> players = new ArrayList<>();
+
+    public int getPlayerSize(){
+        return players.size();
+    }
 }

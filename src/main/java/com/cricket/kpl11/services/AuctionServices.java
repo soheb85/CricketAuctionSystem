@@ -1,9 +1,13 @@
 package com.cricket.kpl11.services;
 
 
+import com.cricket.kpl11.dto.BidRequestDto;
+import com.cricket.kpl11.dto.BidResponseDto;
 import com.cricket.kpl11.dto.GeneratePlayerDto;
 import com.cricket.kpl11.entity.Players;
+import com.cricket.kpl11.entity.Team;
 import com.cricket.kpl11.exception.NoPlayerFoundException;
+import com.cricket.kpl11.exception.NoTeamFoundException;
 import com.cricket.kpl11.mapper.AuctionMapper;
 import com.cricket.kpl11.repository.PlayersRepo;
 import com.cricket.kpl11.repository.TeamRepo;
@@ -18,6 +22,9 @@ public class AuctionServices {
 
     @Autowired
     private PlayersRepo playersRepo;
+
+    @Autowired
+    private TeamRepo teamRepo;
 
     private Set<Long> alreadyGenerated = new HashSet<>();
 
@@ -49,6 +56,50 @@ public class AuctionServices {
 
         alreadyGenerated.add(id);
         return AuctionMapper.mapToGeneratePlayerDto(sendPlayer);
+    }
+
+    // ------>> Bid player services for every layer and every team.
+
+    public BidResponseDto bidPlayer(BidRequestDto bidRequestDto){
+
+        Players players = playersRepo.findById(bidRequestDto.getPlayerId())
+                .orElseThrow(()->new NoPlayerFoundException("No Player Found"));
+
+        Team team = teamRepo.findById(bidRequestDto.getTeamId())
+                .orElseThrow(()->new NoTeamFoundException("No Team Found In Database"));
+
+        if(team.getRemainingPoint()<bidRequestDto.getSoldPrice()){
+            return new BidResponseDto("Insufficient Point to buy the player");
+        }
+
+        if(team.getMaxSpendOnPlayer()<bidRequestDto.getSoldPrice()){
+            return new BidResponseDto("Cannot to sold Player to this team because it doesn't have max Spend On player");
+        }
+
+        if(players.getIsSold()){
+            return new BidResponseDto("Player Already Sold");
+        }
+
+
+        //Assign Player to the Team
+
+        players.setTeam(team);
+        players.setSoldPrice(bidRequestDto.getSoldPrice());
+        players.setSold(true);
+        players.setAvailableToAuction(false);
+
+        team.setRemainingPoint(team.getRemainingPoint()- bidRequestDto.getSoldPrice());
+        playersRepo.save(players);
+        teamRepo.save(team);
+
+        int playerCount = team.getPlayerSize();
+        System.out.println("This is the Player Count ----------------------============>>>>>>>>>  "+playerCount);
+
+        team.setMaxSpendOnPlayer(team.getRemainingPoint()-((12-playerCount)*players.getBasePrice()));
+        System.out.println("This is max spend Calculated   -->>>>   "+team.getMaxSpendOnPlayer());
+        teamRepo.save(team);
+
+        return new BidResponseDto("Bidding Successfully");
     }
 
 }
