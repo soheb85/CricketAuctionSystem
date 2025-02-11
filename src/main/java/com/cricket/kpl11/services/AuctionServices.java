@@ -3,8 +3,10 @@ package com.cricket.kpl11.services;
 
 import com.cricket.kpl11.dto.GeneratePlayerDto;
 import com.cricket.kpl11.entity.Players;
+import com.cricket.kpl11.exception.NoPlayerFoundException;
 import com.cricket.kpl11.mapper.AuctionMapper;
 import com.cricket.kpl11.repository.PlayersRepo;
+import com.cricket.kpl11.repository.TeamRepo;
 import com.cricket.kpl11.utility.GenerateRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,13 +36,19 @@ public class AuctionServices {
         alreadyGenerated.add(randomNumber);
 
         Players generatePlayer = playersRepo.findById(randomNumber)
-                .orElseThrow(()-> new RuntimeException("Player not Found by ID"));
+                .orElseThrow(()-> new NoPlayerFoundException("Player not Found by ID"));
 
         return AuctionMapper.mapToGeneratePlayerDto(generatePlayer);
     }
 
     // ------>> Search player by I'd and send generatePlayerDto.
 
+    public GeneratePlayerDto sendPlayerById(Long id){
+        Players sendPlayer = playersRepo.findById(id)
+                .orElseThrow(()->new NoPlayerFoundException("No Player Found in the database with Player Id"));
 
+        alreadyGenerated.add(id);
+        return AuctionMapper.mapToGeneratePlayerDto(sendPlayer);
+    }
 
 }

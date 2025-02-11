@@ -6,6 +6,7 @@ import com.cricket.kpl11.services.AuctionServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,12 @@ public class AuctionController {
     @GetMapping("/generate")
     public ResponseEntity<GeneratePlayerDto> sendPlayer(){
         GeneratePlayerDto generatePlayerDto = auctionServices.sendPlayer();
+        return ResponseEntity.ok(generatePlayerDto);
+    }
+
+    @GetMapping("/generate/{id}")
+    public ResponseEntity<GeneratePlayerDto> sendPalyerById(@PathVariable Long id){
+        GeneratePlayerDto generatePlayerDto = auctionServices.sendPlayerById(id);
         return ResponseEntity.ok(generatePlayerDto);
     }
 }

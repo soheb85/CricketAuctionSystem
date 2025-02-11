@@ -27,6 +27,8 @@ public class Players {
 
     private int soldPrice;
 
+    private boolean availableToAuction = true;
+
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
