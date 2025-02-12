@@ -48,8 +48,9 @@ public class AuctionServices {
         return AuctionMapper.mapToGeneratePlayerDto(generatePlayer);
     }
 
-    // ------>> Search player by I'd and send generatePlayerDto.
 
+
+    // ------>> Search player by I'd and send generatePlayerDto.
     public GeneratePlayerDto sendPlayerById(Long id){
         Players sendPlayer = playersRepo.findById(id)
                 .orElseThrow(()->new NoPlayerFoundException("No Player Found in the database with Player Id"));
@@ -58,8 +59,9 @@ public class AuctionServices {
         return AuctionMapper.mapToGeneratePlayerDto(sendPlayer);
     }
 
-    // ------>> Bid player services for every layer and every team.
 
+
+    // ------>> Bid player services for every player and every team.
     public BidResponseDto bidPlayer(BidRequestDto bidRequestDto){
 
         Players players = playersRepo.findById(bidRequestDto.getPlayerId())
@@ -80,21 +82,28 @@ public class AuctionServices {
             return new BidResponseDto("Player Already Sold");
         }
 
+        if(team.getPlayerSize()>15){
+            return new BidResponseDto("You cannot buy more Player maximum is 15 player");
+        }
 
         //Assign Player to the Team
-
         players.setTeam(team);
         players.setSoldPrice(bidRequestDto.getSoldPrice());
         players.setSold(true);
         players.setAvailableToAuction(false);
 
+        // calculate the remaining point to buy players
         team.setRemainingPoint(team.getRemainingPoint()- bidRequestDto.getSoldPrice());
+
         playersRepo.save(players);
         teamRepo.save(team);
 
+        //calculate the total player in the team
         int playerCount = team.getPlayerSize();
+
         System.out.println("This is the Player Count ----------------------============>>>>>>>>>  "+playerCount);
 
+        // calculate the maximum point spend on the player
         team.setMaxSpendOnPlayer(team.getRemainingPoint()-((12-playerCount)*players.getBasePrice()));
         System.out.println("This is max spend Calculated   -->>>>   "+team.getMaxSpendOnPlayer());
         teamRepo.save(team);

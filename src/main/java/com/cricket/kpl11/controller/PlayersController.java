@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/player")
+@CrossOrigin("*")
 public class PlayersController {
 
     @Autowired
