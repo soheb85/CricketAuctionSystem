@@ -30,7 +30,7 @@ public class AuctionServices {
 
     // ---->> Generate Random Player for auction.
     public GeneratePlayerDto sendPlayer(){
-        if (alreadyGenerated.size() >= 4) { // If all 4 numbers are used, throw an exception
+        if (alreadyGenerated.size() >= 10) { // If all 4 numbers are used, throw an exception
             throw new RuntimeException("All players have been generated, no more players left.");
         }
 
@@ -62,6 +62,7 @@ public class AuctionServices {
 
 
     // ------>> Bid player services for every player and every team.
+    // ------>> For Sold PLayer
     public BidResponseDto bidPlayer(BidRequestDto bidRequestDto){
 
         Players players = playersRepo.findById(bidRequestDto.getPlayerId())
@@ -109,6 +110,16 @@ public class AuctionServices {
         teamRepo.save(team);
 
         return new BidResponseDto("Bidding Successfully");
+    }
+
+    // ------>> Bid player services for every player and every team.
+    // ------>> For UnSold PLayer
+
+    public void unsoldBid(Long id){
+        Players players = playersRepo.findById(id)
+                .orElseThrow(()->new NoPlayerFoundException("No Player Found"));
+        players.setAvailableToAuction(false);
+        playersRepo.save(players);
     }
 
 }

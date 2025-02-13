@@ -8,6 +8,6 @@ public class GenerateRandom {
 
     public static long generateRandom(){
 
-        return 1+random.nextInt(4);
+        return 1+random.nextInt(10);
     }
 }

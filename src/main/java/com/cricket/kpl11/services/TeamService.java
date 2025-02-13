@@ -28,10 +28,11 @@ public class TeamService {
         jdbcTemplate.execute("ALTER TABLE teams AUTO_INCREMENT = 1");
     }
 
+    // Get Team details like name, Total player, Maximum spend on the player
     public TeamResponseDto sendTeamDetails(Long id){
         Team team = teamRepo.findById(id)
                 .orElseThrow(()->new NoTeamFoundException("No Team Found in the Database"));
 
-        return new TeamResponseDto(team.getTeamName(), team.getPlayerSize(), team.getMaxSpendOnPlayer());
+        return new TeamResponseDto(team.getTeamId(),team.getTeamName(), team.getPlayerSize(), team.getMaxSpendOnPlayer());
     }
 }

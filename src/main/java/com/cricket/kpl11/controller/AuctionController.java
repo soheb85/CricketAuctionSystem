@@ -34,4 +34,10 @@ public class AuctionController {
         BidResponseDto bidResponseDto = auctionServices.bidPlayer(bidRequestDto);
         return ResponseEntity.ok(bidResponseDto);
     }
+
+    @PostMapping("/unsold/{id}")
+    public ResponseEntity<String> unsoldBid(@PathVariable Long id){
+        auctionServices.unsoldBid(id);
+        return ResponseEntity.ok("Player Unsold");
+    }
 }

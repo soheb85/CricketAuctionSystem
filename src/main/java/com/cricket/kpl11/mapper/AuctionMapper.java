@@ -7,9 +7,10 @@ public class AuctionMapper {
 
     public static GeneratePlayerDto mapToGeneratePlayerDto(Players players){
         return new GeneratePlayerDto(
+                players.getPlayerId(),
                 players.getPlayerName(),
                 players.getPlayerRole(),
-                players.getBasePrice()
+                players.getImageUrl()
         );
     }
 }

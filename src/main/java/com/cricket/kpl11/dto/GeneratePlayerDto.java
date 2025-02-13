@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeneratePlayerDto {
-
+    private Long PlayerID;
     private String PlayerName;
     private String PlayerRole;
-    private int basePrice;
+    private String imageUrl;
 
 }
