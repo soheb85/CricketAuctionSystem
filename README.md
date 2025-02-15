@@ -48,7 +48,7 @@ Backend Setup
 
 Clone the repository:
 
-git clone https://github.com/your-repo/cricket-auction.git
+git clone https://github.com/soheb85/CricketAuctionSystem.git
 cd cricket-auction/backend
 
 Configure database in application.properties:
