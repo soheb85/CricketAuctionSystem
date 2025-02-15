@@ -104,7 +104,7 @@ public class AuctionServices {
 
         System.out.println("This is the Player Count ----------------------============>>>>>>>>>  "+playerCount);
 
-        // calculate the maximum point spend on the player
+        // calculate the maximum point spent on the player
         team.setMaxSpendOnPlayer(team.getRemainingPoint()-((12-playerCount)*players.getBasePrice()));
         System.out.println("This is max spend Calculated   -->>>>   "+team.getMaxSpendOnPlayer());
         teamRepo.save(team);

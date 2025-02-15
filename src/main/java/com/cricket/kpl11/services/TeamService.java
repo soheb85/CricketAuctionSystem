@@ -1,12 +1,17 @@
 package com.cricket.kpl11.services;
 
+import com.cricket.kpl11.dto.TeamDto;
 import com.cricket.kpl11.dto.TeamResponseDto;
 import com.cricket.kpl11.entity.Team;
 import com.cricket.kpl11.exception.NoTeamFoundException;
+import com.cricket.kpl11.mapper.TeamDtoMapper;
 import com.cricket.kpl11.repository.TeamRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -34,5 +39,14 @@ public class TeamService {
                 .orElseThrow(()->new NoTeamFoundException("No Team Found in the Database"));
 
         return new TeamResponseDto(team.getTeamId(),team.getTeamName(), team.getPlayerSize(), team.getMaxSpendOnPlayer());
+    }
+
+    //--->>> Get All Player by teams service using //TeamDto, PlayerDto, TeamDtoMapper
+
+    public List<TeamDto> getAllTeamsPlayer(){
+       return teamRepo.findAll()
+                .stream()
+                .map(TeamDtoMapper::mapToTeamDto)
+                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package com.cricket.kpl11.controller;
 
 
+import com.cricket.kpl11.dto.TeamDto;
 import com.cricket.kpl11.dto.TeamResponseDto;
 import com.cricket.kpl11.entity.Team;
 import com.cricket.kpl11.services.TeamService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.List;
 
 @RestController
 @RequestMapping("/team")
@@ -34,5 +36,11 @@ public class TeamController {
     public ResponseEntity<TeamResponseDto> sendTeamDetails(@PathVariable Long id){
         TeamResponseDto teamResponseDto = teamService.sendTeamDetails(id);
         return ResponseEntity.ok(teamResponseDto);
+    }
+
+    @GetMapping("/players")
+    public ResponseEntity<List<TeamDto>> getAllTeamsPlayer(){
+        List<TeamDto> teamDto = teamService.getAllTeamsPlayer();
+        return ResponseEntity.ok(teamDto);
     }
 }
